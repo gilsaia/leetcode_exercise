@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=222 lang=cpp
+ * @lc app=leetcode.cn id=110 lang=cpp
  *
- * [222] 完全二叉树的节点个数
+ * [110] 平衡二叉树
  */
 struct TreeNode {
   int val;
@@ -31,36 +31,23 @@ using namespace std;
  */
 class Solution {
 public:
-  int countNodes(TreeNode *root) {
+  int dfs(TreeNode *root) {
     if (!root) {
       return 0;
     }
-    int res = 1;
-    TreeNode *cur = root;
-    while (cur) {
-      if (cur->left) {
-        res++;
-        cur = cur->left;
-      } else {
-        break;
-      }
+    int left = dfs(root->left);
+    int right = dfs(root->right);
+    if (left == -1 || right == -1 || abs(left - right) > 1) {
+      return -1;
     }
-    int left = 1 << (res - 1), right = left * 2 - 1, mid;
-    while (left < right) {
-      mid = (right - left + 1) / 2 + left;
-      int tmp = res - 1;
-      cur = root;
-      while (tmp) {
-        cur = ((mid >> (tmp - 1)) & 1) ? cur->right : cur->left;
-        --tmp;
-      }
-      if (cur) {
-        left = mid;
-      } else {
-        right = mid - 1;
-      }
+    return max(left, right) + 1;
+  }
+  bool isBalanced(TreeNode *root) {
+    if (!root) {
+      return true;
     }
-    return left;
+    int res = dfs(root);
+    return !(res == -1);
   }
 };
 // @lc code=end
