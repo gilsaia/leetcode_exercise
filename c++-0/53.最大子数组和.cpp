@@ -9,24 +9,18 @@ using namespace std;
 class Solution {
 public:
   int maxSubArray(vector<int> &nums) {
-    vector<int> addsum;
-    addsum.push_back(nums[0]);
-    for (int i = 1; i < nums.size(); ++i) {
-      addsum.push_back(addsum[i - 1] + nums[i]);
-    }
-    int res = addsum[0];
-    int minleft = 0, maxright = 0;
-    for (int i = 1; i < nums.size(); ++i) {
-      if (addsum[i] >= addsum[maxright]) {
-        maxright = i;
+    int countsum = INT_MIN;
+    int count = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+      count += nums[i];
+      if (count > countsum) {
+        countsum = count;
       }
-      if (addsum[i] < addsum[minleft]) {
-        minleft = i;
-      }
-      if (maxright >= minleft) {
-        res = max(res, addsum[maxright] - addsum[minleft]);
+      if (count <= 0) {
+        count = 0;
       }
     }
+    return countsum;
   }
 };
 // @lc code=end
